@@ -1,71 +1,75 @@
 <!doctype html>
 <html lang="ar">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>اختبار كيمياء - قياس المادة (50 دقيقة)</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>اختبار كيمياء — صفحة سؤال واحد</title>
 <style>
   :root{--main:#0b79d0;--ok:#1b9a3b;--bad:#d9534f}
   body{font-family:Arial, sans-serif;direction:rtl;text-align:right;background:#f5f7fa;margin:0;padding:18px}
-  .wrap{max-width:1000px;margin:0 auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 6px 20px rgba(10,20,30,0.06)}
-  h1{margin:0 0 6px;color:var(--main)}
+  .wrap{max-width:920px;margin:0 auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 6px 20px rgba(10,20,30,0.06)}
+  h1{margin:0 0 8px;color:var(--main)}
   .small{color:#555;font-size:14px}
-  label{display:block;margin-bottom:6px}
+  .row{margin-top:12px}
   input[type="text"],select{padding:10px;width:100%;box-sizing:border-box;border-radius:6px;border:1px solid #ccc}
   .btn{display:inline-block;padding:10px 14px;border-radius:8px;background:var(--main);color:#fff;border:none;cursor:pointer}
-  .btn.warn{background:#ff7043}
   .timer{font-weight:700;margin:10px 0;font-size:18px}
-  .q{margin:14px 0;padding:12px;border-radius:8px;border:1px solid #eef3f8;background:#fff}
-  .choices label{display:block;margin:8px 0;cursor:pointer}
-  .hidden{display:none}
-  .result{margin-top:12px;padding:12px;border-radius:8px;background:#fbfdfe}
-  .correct{color:var(--ok);font-weight:700}
-  .wrong{color:var(--bad);font-weight:700}
+  .question-card{margin:14px 0;padding:18px;border-radius:10px;border:1px solid #eef3f8;background:#fff}
+  .choices{margin-top:12px}
+  .choice{display:block;padding:10px 12px;margin:8px 0;border-radius:8px;border:1px solid #e2e8f0;background:#fcfdff;cursor:pointer}
+  .choice.disabled{opacity:0.6;pointer-events:none}
+  .choice.correct{border-color:var(--ok);background:#f0fff4}
+  .choice.wrong{border-color:var(--bad);background:#fff5f5}
+  .progress{margin-top:8px;color:#666}
+  .result-box{margin-top:12px;padding:12px;border-radius:8px;background:#fbfdfe}
   .key-row{padding:8px;border-bottom:1px solid #f1f3f6}
-  .actions{margin-top:12px}
   .download-btn{background:#00a86b;margin-left:8px}
   footer{margin-top:14px;color:#888;font-size:13px}
 </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- Page 1: student data -->
+    <!-- Start page: student info -->
     <div id="page-student">
       <h1>📝 بيانات الطالب</h1>
       <p class="small">اكتب اسمك واختر الشعبة ثم اضغط "ابدأ الاختبار". سيبدأ المؤقت (50 دقيقة) عند الضغط.</p>
-      <div style="margin-top:12px">
-        <label>الاسم:</label>
-        <input id="student-name" type="text" placeholder="مثال: محمد العلي">
-      </div>
-      <div style="margin-top:12px">
-        <label>الشعبة:</label>
+      <div class="row"><label>الاسم:</label><input id="student-name" type="text" placeholder="مثال: محمد العلي"></div>
+      <div class="row"><label>الشعبة:</label>
         <select id="student-class">
           <option value="">اختر الشعبة</option>
           <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option>
         </select>
       </div>
-      <div style="margin-top:14px">
-        <button id="start-btn" class="btn">ابدأ الاختبار</button>
-      </div>
+      <div class="row"><button id="start-btn" class="btn">ابدأ الاختبار</button></div>
     </div>
 
-    <!-- Page 2: quiz -->
+    <!-- Quiz page: one question at a time -->
     <div id="page-quiz" class="hidden">
-      <h1>🧪 اختبار كيمياء - أول ثانوي</h1>
-      <p class="small">الباب الخامس: قياس المادة — الكتلة والمول</p>
-      <div class="timer">⏰ الوقت المتبقي: <span id="time">50:00</span></div>
-      <div id="quiz"></div>
-      <div class="actions">
-        <button id="submit" class="btn">تقييم الاختبار</button>
-        <button id="finish-early" class="btn warn">إنهاء سريع</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <h1>🧪 اختبار كيمياء — سؤال واحد</h1>
+          <div class="small">الباب الخامس: قياس المادة — الكتلة والمول</div>
+        </div>
+        <div style="text-align:left">
+          <div class="timer">⏰ الوقت المتبقي: <span id="time">50:00</span></div>
+          <div class="progress">السؤال <span id="current-num">1</span> من <span id="total-num">30</span></div>
+        </div>
+      </div>
+
+      <div id="question-area" class="question-card" style="margin-top:12px">
+        <!-- question content injected here -->
+      </div>
+
+      <div style="margin-top:10px">
+        <button id="end-early" class="btn" style="background:#ff7043">إنهاء سريع</button>
       </div>
     </div>
 
-    <!-- Page 3: result -->
+    <!-- Result page -->
     <div id="page-result" class="hidden">
       <h1>📊 نتيجة الاختبار</h1>
       <div id="student-info" class="small"></div>
-      <div id="score" class="result"></div>
+      <div id="score" class="result-box"></div>
       <div id="details" style="margin-top:12px;border-radius:8px;background:#fbfdfe;padding:8px"></div>
       <div style="margin-top:12px">
         <button id="retry" class="btn">إعادة المحاولة</button>
@@ -73,11 +77,12 @@
       </div>
     </div>
 
-    <footer>ملف الاختبار يعمل محليًا وعلى GitHub Pages. الأصوات خفيفة ومضمّنة.</footer>
+    <footer>الاختبار يعمل محليًا وعلى GitHub Pages. الأصوات خفيفة ومضمّنة داخل الكود.</footer>
   </div>
 
 <script>
-/* ------------------ بيانات الاختبار (30 سؤال) ------------------ */
+/* ================== بيانات الاختبار (30 سؤال) ================== */
+/* يمكنك تعديل/استبدال الأسئلة هنا بسهولة */
 const quizData = [
 {"q":"ما الوحدة المستخدمة في قياس الكتلة المولية؟","choices":["الجرام","الكيلوغرام","جرام/مول","لتر"],"ans":2},
 {"q":"ما عدد الجسيمات في مول واحد من المادة؟","choices":["عدد أفوجادرو","الكتلة الذرية","الحجم المولي","الوزن الذري"],"ans":0},
@@ -110,64 +115,36 @@ const quizData = [
 {"q":"عند احتراق 2 مول من الهيدروجين مع الأكسجين ينتج:","choices":["2 مول ماء","1 مول ماء","4 مول ماء","لا شيء"],"ans":0},
 {"q":"أي من الآتي يمثل العلاقة الصحيحة بين المولات والكتلة المولية؟","choices":["عدد المولات = الكتلة ÷ الكتلة المولية","الكتلة = عدد المولات ÷ الكتلة المولية","الكتلة المولية = الكتلة × عدد المولات","جميع ما سبق"],"ans":0}
 ];
-/* ------------------ إعداد الصوت (مضمّن: نغمات خفيفة) ------------------ */
+/* ================== إعداد الصوت (خفيف جدًا) ================== */
 let audioCtx = null;
 function ensureAudioCtx(){
   if(!audioCtx){
-    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-    catch(e){ audioCtx = null; }
+    try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ audioCtx = null; }
   }
 }
-function playLightTone(type){
+function playTone(type){
   ensureAudioCtx();
   if(!audioCtx) return;
   const now = audioCtx.currentTime;
   const o = audioCtx.createOscillator();
   const g = audioCtx.createGain();
   o.type = 'sine';
-  if(type === 'correct'){
-    o.frequency.setValueAtTime(880, now); // نغمة عالية خفيفة
-    g.gain.setValueAtTime(0.02, now);
-  } else {
-    o.frequency.setValueAtTime(300, now); // نغمة منخفضة خفيفة
-    g.gain.setValueAtTime(0.02, now);
-  }
+  if(type==='correct'){ o.frequency.setValueAtTime(880, now); g.gain.setValueAtTime(0.02, now); }
+  else { o.frequency.setValueAtTime(300, now); g.gain.setValueAtTime(0.02, now); }
   o.connect(g); g.connect(audioCtx.destination);
   o.start(now);
   g.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
   o.stop(now + 0.13);
 }
 
-/* ------------------ واجهة الاختبار و المنطق ------------------ */
+/* ================== منطق التنقّل بين الأسئلة ================== */
 const TOTAL_SECONDS = 50 * 60;
 let remainingSeconds = TOTAL_SECONDS;
 let timerInterval = null;
+let currentIndex = 0;
+const answersRecord = new Array(quizData.length).fill(null);
 
-function renderQuiz(){
-  const quizDiv = document.getElementById('quiz');
-  quizDiv.innerHTML = '';
-  quizData.forEach((item, idx) => {
-    const qdiv = document.createElement('div');
-    qdiv.className = 'q';
-    const qtitle = document.createElement('div');
-    qtitle.innerHTML = `<strong>السؤال ${idx+1}:</strong> ${item.q}`;
-    qdiv.appendChild(qtitle);
-    const choicesDiv = document.createElement('div');
-    choicesDiv.className = 'choices';
-    item.choices.forEach((ch, j) => {
-      const lbl = document.createElement('label');
-      lbl.innerHTML = `<input type="radio" name="q${idx}" value="${j}"> ${ch}`;
-      lbl.addEventListener('change', () => {
-        // تشغيل صوت خفيف حسب الصحة
-        if(j === item.ans) playLightTone('correct');
-        else playLightTone('wrong');
-      });
-      choicesDiv.appendChild(lbl);
-    });
-    qdiv.appendChild(choicesDiv);
-    quizDiv.appendChild(qdiv);
-  });
-}
+document.getElementById('total-num').textContent = quizData.length;
 
 function startTimer(onTimeout){
   clearInterval(timerInterval);
@@ -188,87 +165,133 @@ function startTimer(onTimeout){
 }
 function stopTimer(){ clearInterval(timerInterval); }
 
-function gradeQuiz(){
-  const studentName = document.getElementById('student-name').value || 'غير معروف';
-  const studentClass = document.getElementById('student-class').value || '-';
-  let correct = 0;
-  const detailsDiv = document.getElementById('details');
-  detailsDiv.innerHTML = '';
-  const answers = [];
-  quizData.forEach((item, idx) => {
-    const sel = document.querySelector(`input[name="q${idx}"]:checked`);
-    const user = sel ? parseInt(sel.value) : null;
-    const ok = item.ans;
-    answers.push({
-      question: item.q,
-      chosen: user !== null ? item.choices[user] : null,
-      correct: item.choices[ok],
-      isCorrect: user === ok
-    });
-    const row = document.createElement('div');
-    row.className = 'key-row';
-    if(user === ok){
-      correct++;
-      row.innerHTML = `<strong>السؤال ${idx+1}:</strong> <span class="correct">صحيح</span> — إجابتك: ${item.choices[user] || 'لم تجب'}`;
+/* render one question (single-page) */
+function renderQuestion(index){
+  currentIndex = index;
+  document.getElementById('current-num').textContent = index+1;
+  const area = document.getElementById('question-area');
+  const item = quizData[index];
+  area.innerHTML = '';
+  const qtitle = document.createElement('div');
+  qtitle.innerHTML = `<strong>السؤال ${index+1}:</strong> ${item.q}`;
+  area.appendChild(qtitle);
+  const choicesDiv = document.createElement('div'); choicesDiv.className='choices';
+  item.choices.forEach((ch, j) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.type = 'button';
+    btn.innerHTML = ch;
+    btn.addEventListener('click', ()=> handleChoice(btn, index, j));
+    choicesDiv.appendChild(btn);
+  });
+  area.appendChild(choicesDiv);
+}
+
+/* handle answer selection: disable choices, play sound, mark, then auto-advance */
+function handleChoice(btn, qIdx, chosenIdx){
+  // prevent double-click
+  if(answersRecord[qIdx] !== null) return;
+  const item = quizData[qIdx];
+  const parent = btn.parentElement;
+  const buttons = Array.from(parent.querySelectorAll('.choice'));
+  // mark chosen visually and disable all
+  buttons.forEach((b,i)=>{
+    b.classList.add('disabled');
+    if(i === item.ans) b.classList.add('correct');
+    if(i === chosenIdx && i !== item.ans) b.classList.add('wrong');
+  });
+  // record answer
+  const isCorrect = chosenIdx === item.ans;
+  answersRecord[qIdx] = { chosenIndex: chosenIdx, isCorrect: isCorrect };
+  // play tone
+  playTone(isCorrect ? 'correct' : 'wrong');
+  // after short delay, advance to next or finish
+  setTimeout(()=>{
+    if(qIdx + 1 < quizData.length){
+      renderQuestion(qIdx + 1);
     } else {
-      row.innerHTML = `<strong>السؤال ${idx+1}:</strong> <span class="wrong">خاطئ</span> — إجابتك: ${item.choices[user] || '---'} — الإجابة الصحيحة: ${item.choices[ok]}`;
+      // finish
+      gradeAndShowResult();
     }
-    detailsDiv.appendChild(row);
+  }, 700); // 700ms pause so student sees feedback
+}
+
+/* finalize and show result page */
+function gradeAndShowResult(){
+  stopTimer();
+  const name = document.getElementById('student-name').value || 'غير معروف';
+  const cls = document.getElementById('student-class').value || '-';
+  let correct = 0;
+  const details = document.getElementById('details');
+  details.innerHTML = '';
+  const answersList = [];
+  quizData.forEach((item, idx) => {
+    const rec = answersRecord[idx];
+    const chosen = rec ? item.choices[rec.chosenIndex] : null;
+    const ok = item.choices[item.ans];
+    const isCorrect = rec ? rec.isCorrect : false;
+    if(isCorrect) correct++;
+    answersList.push({ question: item.q, chosen: chosen, correct: ok, isCorrect: isCorrect });
+    const row = document.createElement('div'); row.className='key-row';
+    if(isCorrect) row.innerHTML = `<strong>السؤال ${idx+1}:</strong> <span class="correct">صحيح</span> — إجابتك: ${chosen || 'لم تجب'}`;
+    else row.innerHTML = `<strong>السؤال ${idx+1}:</strong> <span class="wrong">خاطئ</span> — إجابتك: ${chosen || '---'} — الإجابة الصحيحة: ${ok}`;
+    details.appendChild(row);
   });
 
-  document.getElementById('student-info').innerHTML = `<p><strong>الاسم:</strong> ${studentName} — <strong>الشعبة:</strong> ${studentClass}</p>`;
+  document.getElementById('student-info').innerHTML = `<p><strong>الاسم:</strong> ${name} — <strong>الشعبة:</strong> ${cls}</p>`;
   document.getElementById('score').innerHTML = `<h3>الدرجة: ${correct} / ${quizData.length}</h3>`;
-  stopTimer();
 
-  // عرض صفحة النتيجة
-  document.getElementById('page-quiz').classList.add('hidden');
-  document.getElementById('page-result').classList.remove('hidden');
-
-  // تجهيز ملف التنزيل (JSON)
-  const report = { name: studentName, class: studentClass, score: `${correct}/${quizData.length}`, answers: answers, timeLeft: document.getElementById('time').textContent };
+  // prepare download
+  const report = { name: name, class: cls, score: `${correct}/${quizData.length}`, timeLeft: document.getElementById('time').textContent, answers: answersList };
   document.getElementById('download').onclick = function(){
     const blob = new Blob([JSON.stringify(report, null, 2)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    const safeName = (studentName||'student').replace(/\s+/g,'_');
-    a.download = `result_${safeName}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const a = document.createElement('a'); a.href = url;
+    const safe = (name||'student').replace(/\s+/g,'_');
+    a.download = `result_${safe}.json`; a.click(); URL.revokeObjectURL(url);
   };
+
+  // show result page
+  document.getElementById('page-quiz').classList.add('hidden');
+  document.getElementById('page-result').classList.remove('hidden');
 }
 
-/* ------------------ الربط بالأزرار ------------------ */
-document.getElementById('start-btn').addEventListener('click', () => {
+/* start button: validate and begin */
+document.getElementById('start-btn').addEventListener('click', ()=>{
   const name = document.getElementById('student-name').value.trim();
   const cls = document.getElementById('student-class').value;
   if(!name || !cls){ alert('رجاءً اكتب الاسم واختر الشعبة قبل البدء.'); return; }
-  // إظهار صفحة الاختبار
+  // hide student page, show quiz, render first question and start timer
   document.getElementById('page-student').classList.add('hidden');
   document.getElementById('page-quiz').classList.remove('hidden');
-  renderQuiz();
-  startTimer(() => {
-    alert('انتهى الوقت. سيتم تقييم الاختبار الآن.');
-    gradeQuiz();
-  });
-  // تهيئة صوت مبكرًا (لتقليل تأخير التشغيل في بعض المتصفحات)
-  ensureAudioCtx();
+  renderQuestion(0);
+  startTimer(()=>{ alert('انتهى الوقت. سيتم تقييم الاختبار الآن.'); gradeAndShowResult(); });
+  ensureAudioCtx(); // warm audio
 });
 
-document.getElementById('submit').addEventListener('click', () => {
-  if(confirm('هل تريد تقييم الاختبار الآن؟')) gradeQuiz();
+/* end early button */
+document.getElementById('end-early').addEventListener('click', ()=>{
+  if(confirm('هل تريد إنهاء الاختبار الآن وتقييمه؟')) gradeAndShowResult();
 });
-document.getElementById('finish-early').addEventListener('click', () => {
-  if(confirm('هل تريد إنهاء الاختبار الآن وتقييمه؟')) gradeQuiz();
-});
-document.getElementById('retry').addEventListener('click', () => {
-  // إعادة إلى صفحة البيانات وتنظيف الاختيارات
+
+/* retry button */
+document.getElementById('retry').addEventListener('click', ()=>{
+  // reset records and pages
+  for(let i=0;i<answersRecord.length;i++) answersRecord[i] = null;
   document.getElementById('page-result').classList.add('hidden');
   document.getElementById('page-student').classList.remove('hidden');
-  const inputs = document.querySelectorAll('input[type="radio"]');
-  inputs.forEach(i => i.checked = false);
-  // إعادة المؤقت
+  // clear inputs
+  document.getElementById('student-name').value = '';
+  document.getElementById('student-class').value = '';
+  document.getElementById('time').textContent = '50:00';
   stopTimer();
+});
+
+/* prevent refresh/navigation issues: warn when leaving page during test */
+window.addEventListener('beforeunload', function(e){
+  if(document.getElementById('page-quiz').classList.contains('hidden')) return;
+  e.preventDefault();
+  e.returnValue = '';
 });
 </script>
 </body>
